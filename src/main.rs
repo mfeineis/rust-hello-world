@@ -29,6 +29,11 @@ fn main() {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
+                for _ in 1..secret_number {
+                    print!(".");
+                }
+
+                println!();
                 println!("You win!");
                 break;
             }
