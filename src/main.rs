@@ -2,10 +2,45 @@ extern crate rand;
 
 use rand::Rng;
 use std::cmp::Ordering;
+//use std::fmt::Display;
 use std::io;
+
+#[derive(Clone, Debug)]
+struct User {
+    username: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+
+impl User {
+    fn associated() -> bool {
+        true
+    }
+
+    fn disable(&self) -> User {
+        let mut new = self.clone();
+        new.active = false;
+
+        new
+    }
+}
 
 fn main() {
     println!("Guess the number!");
+
+    let aang = User {
+        email: String::from("aang@tl.ab"),
+        username: String::from("Aang"),
+        active: true,
+        sign_in_count: 1,
+    };
+    println!("{:?}", aang);
+
+    let inactive_aang = aang.disable();
+    println!("{:?}", inactive_aang);
+
+    println!("{}", User::associated());
 
     let gift = give_ownership();
     println!("{}", gift);
