@@ -5,12 +5,63 @@ use std::cmp::Ordering;
 //use std::fmt::Display;
 use std::io;
 
+#[derive(Debug)]
+enum Role {
+    Admin,
+    User,
+}
+
+impl Role {
+    fn is_special(&self) -> bool {
+        match self {
+            Role::Admin => true,
+            _ => false,
+        }
+    }
+}
+
+#[derive(Debug)]
+enum UsState {
+    Alabama,
+    Alaska,
+}
+
+#[derive(Debug)]
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter(UsState),
+}
+
+impl Coin {
+    fn value_in_cents(&self) -> u32 {
+        match self {
+            Coin::Penny => 1,
+            Coin::Nickel => 5,
+            Coin::Dime => 10,
+            Coin::Quarter(state) => {
+                println!("State quarter from {:?}!", state);
+                25
+            }
+        }
+    }
+}
+
+fn plus_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        None => None,
+        Some(i) => Some(i + 1),
+    }
+}
+
 #[derive(Clone, Debug)]
 struct User {
     username: String,
     email: String,
     sign_in_count: u64,
     active: bool,
+    //roles: Role[],
 }
 
 impl User {
@@ -41,6 +92,19 @@ fn main() {
     println!("{:?}", inactive_aang);
 
     println!("{}", User::associated());
+
+    let role = Role::Admin;
+    println!("{:?}, is_special? {}", role, role.is_special());
+
+    let coin = Coin::Quarter(UsState::Alaska);
+    println!("{:?} is worth {} cents", coin, coin.value_in_cents());
+
+    println!("plus_one: None => {:?}, Some(41) => {:?}", plus_one(None), plus_one(Some(41)));
+
+    let some_u8_value = Some(0u8);
+    if let Some(3) = some_u8_value {
+        println!("three")
+    }
 
     let gift = give_ownership();
     println!("{}", gift);
@@ -108,7 +172,8 @@ fn main() {
 }
 
 //fn first_word(s: &String) -> &str {
-fn first_word(s: &str) -> &str { // better
+fn first_word(s: &str) -> &str {
+    // better
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
