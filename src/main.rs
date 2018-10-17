@@ -1,9 +1,12 @@
 extern crate rand;
+extern crate communicator;
 
 use rand::Rng;
 use std::cmp::Ordering;
 //use std::fmt::Display;
 use std::io;
+
+use communicator::network;
 
 #[derive(Debug)]
 enum Role {
@@ -78,6 +81,8 @@ impl User {
 }
 
 fn main() {
+    network::connect();
+
     println!("Guess the number!");
 
     let aang = User {
