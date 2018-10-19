@@ -132,6 +132,50 @@ fn main() {
     let _r2 = &s4;
     //let r3 = &mut s4; // boom!
 
+    {
+        let _v1: Vec<i32> = Vec::new();
+        let _v2 = vec![1, 2, 3];
+        let mut v3 = Vec::new();
+        v3.push(5);
+        v3.push(6);
+        v3.push(7);
+    }
+
+    {
+        let v = vec![1, 2, 3, 4, 5];
+        let _third: &i32 = &v[2];
+
+        match v.get(2) {
+            Some(_) => println!("found: {}", 2),
+            None => println!("boom! {}", 2)
+        }
+
+        for i in &v {
+            println!("{}", i);
+        }
+    }
+
+    {
+        let mut v = vec![100, 32, 57];
+        for i in &mut v {
+            *i += 50;
+        }
+    }
+
+    {
+        enum SpreadsheetCell {
+            Int(i32),
+            Float(f64),
+            Text(String),
+        }
+
+        let _row = vec![
+            SpreadsheetCell::Int(3),
+            SpreadsheetCell::Text(String::from("blue")),
+            SpreadsheetCell::Float(10.12),
+        ];
+    }
+
     let _no_dangling_reference = no_dangle();
 
     let some_words = String::from("hello world");
