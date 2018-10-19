@@ -176,6 +176,37 @@ fn main() {
         ];
     }
 
+    {
+        let mut s = String::from("foo");
+        s.push_str("bar");
+    }
+
+    {
+        let s1 = String::from("Hello, ");
+        let s2 = String::from("world!");
+        let _s3 = s1 + &s2; // s1 has been moved and can no longer be used
+
+        //let s4 = format!("{}-{}-{}", s1, s2, s3);
+        //println!("s4 = {}", s4);
+    }
+
+    {
+        let hello = "Здравствуйте";
+
+        let s = &hello[0..4];
+        println!("cyrillic slice: {}", s);
+    }
+
+    for c in "नमस्ते".chars() {
+        println!("{}", c); // 6 chars
+    }
+
+    for b in "नमस्ते".bytes() {
+        println!("{}", b); // 18 bytes
+    }
+
+    // TODO: grapheme clusters via non std create
+
     let _no_dangling_reference = no_dangle();
 
     let some_words = String::from("hello world");
