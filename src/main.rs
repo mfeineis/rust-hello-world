@@ -5,9 +5,33 @@ use rand::Rng;
 use std::cmp::Ordering;
 //use std::fmt::Display;
 use std::io;
+use std::io::ErrorKind;
+use std::io::Read;
 use std::collections::HashMap;
+use std::fs;
+use std::fs::File;
 
 use communicator::network;
+
+pub struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value must be between 1 and 100, got {}.", value);
+        }
+
+        Guess {
+            value
+        }
+    }
+
+    pub fn value(&self) -> u32 {
+        self.value
+    }
+}
 
 #[derive(Debug)]
 enum Role {
@@ -83,6 +107,27 @@ impl User {
 
 fn main() {
     network::connect();
+
+    let _f = File::open("hello.txt");
+
+    let _f = match _f {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
+            },
+            other_error => panic!("There was a problem opening the file: {:?}", other_error)
+        },
+    };
+
+    let _f1 = File::open("hello.txt").unwrap();
+    let _f2 = File::open("hello.txt").expect("Failed to open hello.txt");
+
+    //let vv = vec![1, 2, 3];
+    //vv[99];
+
+    //panic!("crash and burn");
 
     println!("Guess the number!");
 
@@ -369,4 +414,39 @@ fn take_ownership(some_string: String) {
     let s2 = s1.clone();
 
     println!("{}, world! {}", s1, s2);
+}
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let f = File::open("hello.txt");
+
+    let mut f = match f {
+        Ok(file) => file,
+        Err(e) => return Err(e),
+    };
+
+    let mut s = String::new();
+
+    match f.read_to_string(&mut s) {
+        Ok(_) => Ok(s),
+        Err(e) => Err(e),
+    }
+}
+
+fn read_username_from_file1() -> Result<String, io::Error> {
+    let mut f = File::open("hello.txt")?;
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    Ok(s)
+}
+
+fn read_username_from_file2() -> Result<String, io::Error> {
+    let mut s = String::new();
+
+    File::open("hello.txt")?.read_to_string(&mut s)?;
+
+    Ok(s)
+}
+
+fn read_username_from_file3() -> Result<String, io::Error> {
+    fs::read_to_string("hello.txt")
 }
